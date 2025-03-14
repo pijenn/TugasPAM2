@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +14,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnCalculate: Button
     private lateinit var tvResult: TextView
     private lateinit var radioGroup: RadioGroup
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ResultAdapter
+    private val resultsList = mutableListOf<CalculationResult>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         btnCalculate = findViewById(R.id.btnCalculate)
         tvResult = findViewById(R.id.tvResult)
         radioGroup = findViewById(R.id.radioGroup)
+        recyclerView = findViewById(R.id.recyclerViewResults)
+
+        adapter = ResultAdapter(resultsList)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
         if (savedInstanceState != null) {
             tvResult.text = savedInstanceState.getString("savedText", "Result will appear here")
@@ -46,7 +56,10 @@ class MainActivity : AppCompatActivity() {
                 else -> "Please select an operation"
             }
 
-            tvResult.text = "Result: $result Rafie Ramadhan Al Aziz Zein - 235150700111035"
+            val resultText = "Result: $result"
+            tvResult.text = resultText
+
+            adapter.addResult(CalculationResult(resultText))
         }
     }
 
